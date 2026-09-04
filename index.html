@@ -9,74 +9,152 @@
 </head>
 
 <body>
-    <div class="container">
+    <header class="app-header">
+        <div class="brand">
+            <div class="logo">NS</div>
 
-        <h1>NextSeason AI</h1>
-
-        <p class="subtitle">
-            Track performance. Build progress. Prepare for what's next.
-        </p>
-
-        <div class="card">
-            <h2>Athlete Profile</h2>
-
-            <form id="athleteForm">
-                <label for="athleteName">Athlete Name</label>
-                <input id="athleteName" type="text"
-                    placeholder="Enter athlete name" required>
-
-                <label for="sport">Sport</label>
-                <input id="sport" type="text"
-                    placeholder="Enter sport" required>
-
-                <label for="team">Team</label>
-                <input id="team" type="text"
-                    placeholder="Enter team" required>
-
-                <button type="submit">Save Athlete Profile</button>
-            </form>
+            <div>
+                <h1>NextSeason AI</h1>
+                <p>Built for the next level.</p>
+            </div>
         </div>
 
-        <div class="card" id="profileCard" style="display: none;">
-            <h2 id="profileName"></h2>
-            <p><strong>Sport:</strong> <span id="profileSport"></span></p>
-            <p><strong>Team:</strong> <span id="profileTeam"></span></p>
-        </div>
+        <nav>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#profile">Athlete</a>
+            <a href="#performance">Performance</a>
+        </nav>
+    </header>
 
-        <div class="card">
-            <h2>Performance Tracker</h2>
+    <main class="container">
+        <section class="hero">
+            <p class="eyebrow">ATHLETE DEVELOPMENT PLATFORM</p>
+            <h2>Track today. Improve tomorrow.</h2>
+            <p>
+                Record performances, follow progress, and prepare
+                your athlete for what comes next.
+            </p>
+        </section>
 
-            <form id="performanceForm">
-                <label for="gameDate">Game Date</label>
-                <input id="gameDate" type="date" required>
+        <section id="dashboard">
+            <h2 class="section-title">Dashboard</h2>
 
-                <label for="opponent">Opponent</label>
-                <input id="opponent" type="text"
-                    placeholder="Enter opponent" required>
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Games Tracked</span>
+                    <strong id="gameCount">0</strong>
+                </div>
 
-                <label for="position">Position</label>
-                <input id="position" type="text"
-                    placeholder="Enter position" required>
+                <div class="stat-card">
+                    <span class="stat-label">Sport</span>
+                    <strong id="dashboardSport">Not set</strong>
+                </div>
 
-                <label for="stats">Stats or Accomplishments</label>
-                <input id="stats" type="text"
-                    placeholder="Example: 2 touchdowns">
+                <div class="stat-card">
+                    <span class="stat-label">Team</span>
+                    <strong id="dashboardTeam">Not set</strong>
+                </div>
+            </div>
+        </section>
 
-                <label for="notes">Game Notes</label>
-                <input id="notes" type="text"
-                    placeholder="How did the game go?">
+        <section id="profile">
+            <div class="card">
+                <h2>Athlete Profile</h2>
 
-                <button type="submit">Save Performance</button>
-            </form>
-        </div>
+                <form id="athleteForm">
+                    <label for="athleteName">Athlete Name</label>
+                    <input id="athleteName" type="text"
+                        placeholder="Enter athlete name" required>
 
-        <div id="performanceHistory"></div>
+                    <label for="sport">Sport</label>
+                    <input id="sport" type="text"
+                        placeholder="Enter sport" required>
 
-    </div>
+                    <label for="team">Team</label>
+                    <input id="team" type="text"
+                        placeholder="Enter team" required>
+
+                    <button class="primary-button" type="submit">
+                        Save Athlete Profile
+                    </button>
+                </form>
+            </div>
+
+            <div class="card profile-card"
+                id="profileCard"
+                style="display: none;">
+
+                <div class="profile-avatar">🏆</div>
+
+                <div>
+                    <p class="eyebrow">ATHLETE</p>
+                    <h2 id="profileName"></h2>
+
+                    <p>
+                        <strong>Sport:</strong>
+                        <span id="profileSport"></span>
+                    </p>
+
+                    <p>
+                        <strong>Team:</strong>
+                        <span id="profileTeam"></span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="performance">
+            <div class="card">
+                <h2>Performance Tracker</h2>
+                <p class="card-description">
+                    Add a new game to the athlete’s performance history.
+                </p>
+
+                <form id="performanceForm">
+                    <label for="gameDate">Game Date</label>
+                    <input id="gameDate" type="date" required>
+
+                    <label for="opponent">Opponent</label>
+                    <input id="opponent" type="text"
+                        placeholder="Enter opponent" required>
+
+                    <label for="position">Position</label>
+                    <input id="position" type="text"
+                        placeholder="Enter position" required>
+
+                    <label for="stats">
+                        Stats or Accomplishments
+                    </label>
+                    <input id="stats" type="text"
+                        placeholder="Example: Pick 6">
+
+                    <label for="notes">Game Notes</label>
+                    <textarea id="notes"
+                        placeholder="How did the game go?"
+                        rows="4"></textarea>
+
+                    <button class="primary-button" type="submit">
+                        Save Performance
+                    </button>
+                </form>
+            </div>
+
+            <h2 class="section-title">Performance History</h2>
+            <div id="performanceHistory"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>NextSeason AI — Built for athletes and their families.</p>
+    </footer>
 
     <script>
-        const athleteForm = document.getElementById("athleteForm");
-        const performanceForm = document.getElementById("performanceForm");
+        const athleteForm =
+            document.getElementById("athleteForm");
+
+        const performanceForm =
+            document.getElementById("performanceForm");
+
         const performanceHistory =
             document.getElementById("performanceHistory");
 
@@ -91,10 +169,19 @@
             return game;
         });
 
-        localStorage.setItem(
-            "nextSeasonGames",
-            JSON.stringify(savedGames)
-        );
+        saveGames();
+
+        function saveGames() {
+            localStorage.setItem(
+                "nextSeasonGames",
+                JSON.stringify(savedGames)
+            );
+        }
+
+        function updateDashboard() {
+            document.getElementById("gameCount").textContent =
+                savedGames.length;
+        }
 
         function showAthleteProfile(athlete) {
             document.getElementById("profileName").textContent =
@@ -106,76 +193,151 @@
             document.getElementById("profileTeam").textContent =
                 athlete.team;
 
+            document.getElementById("dashboardSport").textContent =
+                athlete.sport;
+
+            document.getElementById("dashboardTeam").textContent =
+                athlete.team;
+
             document.getElementById("profileCard").style.display =
-                "block";
+                "flex";
         }
 
         function displayGames() {
             performanceHistory.innerHTML = "";
 
+            if (savedGames.length === 0) {
+                performanceHistory.innerHTML = `
+                    <div class="empty-message">
+                        No games recorded yet.
+                    </div>
+                `;
+            }
+
             savedGames.slice().reverse().forEach(function(game) {
                 const performanceCard =
                     document.createElement("div");
 
-                performanceCard.className = "card";
+                performanceCard.className =
+                    "card performance-card";
 
-                const date = new Date(game.date + "T00:00:00");
-                const formattedDate = date.toLocaleDateString();
+                const date =
+                    new Date(game.date + "T00:00:00");
+
+                const formattedDate =
+                    date.toLocaleDateString();
 
                 performanceCard.innerHTML = `
-                    <h2>Game Performance</h2>
-                    <p><strong>Date:</strong> ${formattedDate}</p>
-                    <p><strong>Opponent:</strong> ${game.opponent}</p>
-                    <p><strong>Position:</strong> ${game.position}</p>
-                    <p><strong>Stats:</strong> ${game.stats || "None entered"}</p>
-                    <p><strong>Notes:</strong> ${game.notes || "None entered"}</p>
-                    <button onclick="editGame(${game.id})">Edit Game</button>
-                    <button onclick="deleteGame(${game.id})">Delete Game</button>
+                    <div class="game-heading">
+                        <div>
+                            <p class="eyebrow">GAME PERFORMANCE</p>
+                            <h2>vs. ${game.opponent}</h2>
+                        </div>
+
+                        <span class="date-badge">
+                            ${formattedDate}
+                        </span>
+                    </div>
+
+                    <p>
+                        <strong>Position:</strong>
+                        ${game.position}
+                    </p>
+
+                    <p>
+                        <strong>Stats:</strong>
+                        ${game.stats || "None entered"}
+                    </p>
+
+                    <p>
+                        <strong>Notes:</strong>
+                        ${game.notes || "None entered"}
+                    </p>
+
+                    <div class="button-row">
+                        <button class="edit-button"
+                            onclick="editGame(${game.id})">
+                            Edit
+                        </button>
+
+                        <button class="delete-button"
+                            onclick="deleteGame(${game.id})">
+                            Delete
+                        </button>
+                    </div>
                 `;
 
-                performanceHistory.appendChild(performanceCard);
+                performanceHistory.appendChild(
+                    performanceCard
+                );
             });
+
+            updateDashboard();
         }
 
-        athleteForm.addEventListener("submit", function(event) {
-            event.preventDefault();
+        athleteForm.addEventListener(
+            "submit",
+            function(event) {
+                event.preventDefault();
 
-            const athlete = {
-                name: document.getElementById("athleteName").value,
-                sport: document.getElementById("sport").value,
-                team: document.getElementById("team").value
-            };
+                const athlete = {
+                    name: document.getElementById(
+                        "athleteName"
+                    ).value,
 
-            localStorage.setItem(
-                "nextSeasonAthlete",
-                JSON.stringify(athlete)
-            );
+                    sport: document.getElementById(
+                        "sport"
+                    ).value,
 
-            showAthleteProfile(athlete);
-        });
+                    team: document.getElementById(
+                        "team"
+                    ).value
+                };
 
-        performanceForm.addEventListener("submit", function(event) {
-            event.preventDefault();
+                localStorage.setItem(
+                    "nextSeasonAthlete",
+                    JSON.stringify(athlete)
+                );
 
-            const game = {
-                id: Date.now(),
-                date: document.getElementById("gameDate").value,
-                opponent: document.getElementById("opponent").value,
-                position: document.getElementById("position").value,
-                stats: document.getElementById("stats").value,
-                notes: document.getElementById("notes").value
-            };
+                showAthleteProfile(athlete);
+            }
+        );
 
-            savedGames.push(game);
+        performanceForm.addEventListener(
+            "submit",
+            function(event) {
+                event.preventDefault();
 
-            localStorage.setItem(
-                "nextSeasonGames",
-                JSON.stringify(savedGames)
-            );
+                const game = {
+                    id: Date.now(),
 
-            displayGames();
-            performanceForm.reset();
-        });
+                    date: document.getElementById(
+                        "gameDate"
+                    ).value,
+
+                    opponent: document.getElementById(
+                        "opponent"
+                    ).value,
+
+                    position: document.getElementById(
+                        "position"
+                    ).value,
+
+                    stats: document.getElementById(
+                        "stats"
+                    ).value,
+
+                    notes: document.getElementById(
+                        "notes"
+                    ).value
+                };
+
+                savedGames.push(game);
+                saveGames();
+                displayGames();
+                performanceForm.reset();
+            }
+        );
 
         function editGame(gameId) {
             const game = savedGames.find(function(item) {
@@ -187,47 +349,35 @@
                 game.opponent
             );
 
-            if (opponent === null) {
-                return;
-            }
+            if (opponent === null) return;
 
             const position = prompt(
                 "Edit position:",
                 game.position
             );
 
-            if (position === null) {
-                return;
-            }
+            if (position === null) return;
 
             const stats = prompt(
                 "Edit stats or accomplishments:",
                 game.stats
             );
 
-            if (stats === null) {
-                return;
-            }
+            if (stats === null) return;
 
             const notes = prompt(
                 "Edit game notes:",
                 game.notes
             );
 
-            if (notes === null) {
-                return;
-            }
+            if (notes === null) return;
 
             game.opponent = opponent;
             game.position = position;
             game.stats = stats;
             game.notes = notes;
 
-            localStorage.setItem(
-                "nextSeasonGames",
-                JSON.stringify(savedGames)
-            );
-
+            saveGames();
             displayGames();
         }
 
@@ -236,24 +386,20 @@
                 "Are you sure you want to delete this game?"
             );
 
-            if (!shouldDelete) {
-                return;
-            }
+            if (!shouldDelete) return;
 
             savedGames = savedGames.filter(function(game) {
                 return game.id !== gameId;
             });
 
-            localStorage.setItem(
-                "nextSeasonGames",
-                JSON.stringify(savedGames)
-            );
-
+            saveGames();
             displayGames();
         }
 
         const savedAthlete =
-            JSON.parse(localStorage.getItem("nextSeasonAthlete"));
+            JSON.parse(
+                localStorage.getItem("nextSeasonAthlete")
+            );
 
         if (savedAthlete) {
             document.getElementById("athleteName").value =
