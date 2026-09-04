@@ -2,33 +2,274 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>AthleteIQ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextSeason AI</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-	<h1>AthleteIQ</h1>
+    <div class="container">
 
-	<p>Track your athlete's games, practices, stats, and goals.</p>
+        <h1>NextSeason AI</h1>
 
-	<h2>Athlete Profile</h2>
+        <p class="subtitle">
+            Track performance. Build progress. Prepare for what's next.
+        </p>
 
-	<label>Athlete Name:</label>
-	<input type="text">
+        <div class="card">
+            <h2>Athlete Profile</h2>
 
-	<br><br>
+            <form id="athleteForm">
+                <label for="athleteName">Athlete Name</label>
+                <input id="athleteName" type="text"
+                    placeholder="Enter athlete name" required>
 
-	<label>Sport:</label>
-	<input type="text">
-<br><br>
+                <label for="sport">Sport</label>
+                <input id="sport" type="text"
+                    placeholder="Enter sport" required>
 
-<label>Team:</label>
-<input type="text">
+                <label for="team">Team</label>
+                <input id="team" type="text"
+                    placeholder="Enter team" required>
 
-<br><br>
+                <button type="submit">Save Athlete Profile</button>
+            </form>
+        </div>
 
-<button>Create Athlete Profile</button>
+        <div class="card" id="profileCard" style="display: none;">
+            <h2 id="profileName"></h2>
+            <p><strong>Sport:</strong> <span id="profileSport"></span></p>
+            <p><strong>Team:</strong> <span id="profileTeam"></span></p>
+        </div>
+
+        <div class="card">
+            <h2>Performance Tracker</h2>
+
+            <form id="performanceForm">
+                <label for="gameDate">Game Date</label>
+                <input id="gameDate" type="date" required>
+
+                <label for="opponent">Opponent</label>
+                <input id="opponent" type="text"
+                    placeholder="Enter opponent" required>
+
+                <label for="position">Position</label>
+                <input id="position" type="text"
+                    placeholder="Enter position" required>
+
+                <label for="stats">Stats or Accomplishments</label>
+                <input id="stats" type="text"
+                    placeholder="Example: 2 touchdowns">
+
+                <label for="notes">Game Notes</label>
+                <input id="notes" type="text"
+                    placeholder="How did the game go?">
+
+                <button type="submit">Save Performance</button>
+            </form>
+        </div>
+
+        <div id="performanceHistory"></div>
+
+    </div>
+
+    <script>
+        const athleteForm = document.getElementById("athleteForm");
+        const performanceForm = document.getElementById("performanceForm");
+        const performanceHistory =
+            document.getElementById("performanceHistory");
+
+        let savedGames =
+            JSON.parse(localStorage.getItem("nextSeasonGames")) || [];
+
+        savedGames = savedGames.map(function(game, index) {
+            if (!game.id) {
+                game.id = Date.now() + index;
+            }
+
+            return game;
+        });
+
+        localStorage.setItem(
+            "nextSeasonGames",
+            JSON.stringify(savedGames)
+        );
+
+        function showAthleteProfile(athlete) {
+            document.getElementById("profileName").textContent =
+                athlete.name;
+
+            document.getElementById("profileSport").textContent =
+                athlete.sport;
+
+            document.getElementById("profileTeam").textContent =
+                athlete.team;
+
+            document.getElementById("profileCard").style.display =
+                "block";
+        }
+
+        function displayGames() {
+            performanceHistory.innerHTML = "";
+
+            savedGames.slice().reverse().forEach(function(game) {
+                const performanceCard =
+                    document.createElement("div");
+
+                performanceCard.className = "card";
+
+                const date = new Date(game.date + "T00:00:00");
+                const formattedDate = date.toLocaleDateString();
+
+                performanceCard.innerHTML = `
+                    <h2>Game Performance</h2>
+                    <p><strong>Date:</strong> ${formattedDate}</p>
+                    <p><strong>Opponent:</strong> ${game.opponent}</p>
+                    <p><strong>Position:</strong> ${game.position}</p>
+                    <p><strong>Stats:</strong> ${game.stats || "None entered"}</p>
+                    <p><strong>Notes:</strong> ${game.notes || "None entered"}</p>
+                    <button onclick="editGame(${game.id})">Edit Game</button>
+                    <button onclick="deleteGame(${game.id})">Delete Game</button>
+                `;
+
+                performanceHistory.appendChild(performanceCard);
+            });
+        }
+
+        athleteForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const athlete = {
+                name: document.getElementById("athleteName").value,
+                sport: document.getElementById("sport").value,
+                team: document.getElementById("team").value
+            };
+
+            localStorage.setItem(
+                "nextSeasonAthlete",
+                JSON.stringify(athlete)
+            );
+
+            showAthleteProfile(athlete);
+        });
+
+        performanceForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const game = {
+                id: Date.now(),
+                date: document.getElementById("gameDate").value,
+                opponent: document.getElementById("opponent").value,
+                position: document.getElementById("position").value,
+                stats: document.getElementById("stats").value,
+                notes: document.getElementById("notes").value
+            };
+
+            savedGames.push(game);
+
+            localStorage.setItem(
+                "nextSeasonGames",
+                JSON.stringify(savedGames)
+            );
+
+            displayGames();
+            performanceForm.reset();
+        });
+
+        function editGame(gameId) {
+            const game = savedGames.find(function(item) {
+                return item.id === gameId;
+            });
+
+            const opponent = prompt(
+                "Edit opponent:",
+                game.opponent
+            );
+
+            if (opponent === null) {
+                return;
+            }
+
+            const position = prompt(
+                "Edit position:",
+                game.position
+            );
+
+            if (position === null) {
+                return;
+            }
+
+            const stats = prompt(
+                "Edit stats or accomplishments:",
+                game.stats
+            );
+
+            if (stats === null) {
+                return;
+            }
+
+            const notes = prompt(
+                "Edit game notes:",
+                game.notes
+            );
+
+            if (notes === null) {
+                return;
+            }
+
+            game.opponent = opponent;
+            game.position = position;
+            game.stats = stats;
+            game.notes = notes;
+
+            localStorage.setItem(
+                "nextSeasonGames",
+                JSON.stringify(savedGames)
+            );
+
+            displayGames();
+        }
+
+        function deleteGame(gameId) {
+            const shouldDelete = confirm(
+                "Are you sure you want to delete this game?"
+            );
+
+            if (!shouldDelete) {
+                return;
+            }
+
+            savedGames = savedGames.filter(function(game) {
+                return game.id !== gameId;
+            });
+
+            localStorage.setItem(
+                "nextSeasonGames",
+                JSON.stringify(savedGames)
+            );
+
+            displayGames();
+        }
+
+        const savedAthlete =
+            JSON.parse(localStorage.getItem("nextSeasonAthlete"));
+
+        if (savedAthlete) {
+            document.getElementById("athleteName").value =
+                savedAthlete.name;
+
+            document.getElementById("sport").value =
+                savedAthlete.sport;
+
+            document.getElementById("team").value =
+                savedAthlete.team;
+
+            showAthleteProfile(savedAthlete);
+        }
+
+        displayGames();
+    </script>
 
 </body>
 </html>
